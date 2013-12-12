@@ -5,11 +5,11 @@
 #include "TH1Info.h"
 using namespace std;
 
-//template<typename TH1> 
+template<typename TH1> 
 class TH1InfoClass{
         public:
                 //Detail info
-                map<string, TH1D*> mapTH1;
+                map<string, TH1*> mapTH1;
                 string  Name[TH1_Size_];
 		string 	Title[TH1_Size_];
 		string 	xTitle[TH1_Size_];
@@ -23,12 +23,13 @@ class TH1InfoClass{
                 //TH1InfoClass();
 		void Initialize();
                 void Sumw2();
-                TH1D* GetTH1(string Name_);
+                TH1* GetTH1(string Name_);
 };
 
 // Define function
 //TH1InfoClass::TH1InfoClass(){
-void TH1InfoClass::Initialize(){
+template<typename TH1> 
+void TH1InfoClass<TH1>::Initialize(){
         for(int i=0; i<TH1_Size_; i++){ //Loop all kind of TH1
                 Name[i] = TH1Info[i].Name;
 		Title[i] = TH1Info[i].Title;
@@ -38,16 +39,18 @@ void TH1InfoClass::Initialize(){
                 Bin[i]  = TH1Info[i].Bin;
                 Max[i]  = TH1Info[i].Max;
                 Min[i]  = TH1Info[i].Min;
-                mapTH1[Name[i]] = new TH1D(Name[i].c_str(),"",Bin[i], Min[i], Max[i]);
+                mapTH1[Name[i]] = new TH1(Name[i].c_str(),"",Bin[i], Min[i], Max[i]);
         }
 
 }
-void TH1InfoClass::Sumw2(){
+template<typename TH1> 
+void TH1InfoClass<TH1>::Sumw2(){
         for(int i=0; i<TH1_Size_; i++){ //Loop all kind of TH1
                 mapTH1.find(Name[i])->second->Sumw2();
         }
 }
-TH1D* TH1InfoClass::GetTH1(string Name_){
+template<typename TH1> 
+TH1* TH1InfoClass<TH1>::GetTH1(string Name_){
         return mapTH1.find(Name_)->second;
 }
 

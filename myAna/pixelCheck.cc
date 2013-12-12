@@ -3,17 +3,10 @@
 #include <cmath>
 #include <map>
 #include <string>
-#include <cstdlib>
 #include <vector>
-#include "TChain.h"
-#include "TPad.h"
 #include "TMath.h"
 #include "TFile.h"
 #include "TH1D.h"
-#include "TH2F.h"
-#include "TCanvas.h"
-#include "TLegend.h"
-#include "TStyle.h"
 #include "../interface/format.h"
 #include "../interface/TH1InfoClass.h"
 using namespace std;
@@ -57,17 +50,18 @@ void pixelCheck(){
 		cout<<"Success register tree!"<<endl;	
 
 		////= Create Histogram and sub-directory ========================================================================
-		TH1D* h_hits = new TH1D("TotalHits", "Total Hits", 8, 0, 8);
-		h_hits->GetXaxis()->SetBinLabel(1,"ROC_0");
-		h_hits->GetXaxis()->SetBinLabel(2,"ROC_1");
-		h_hits->GetXaxis()->SetBinLabel(3,"ROC_2");
-		h_hits->GetXaxis()->SetBinLabel(4,"ROC_3");
-		h_hits->GetXaxis()->SetBinLabel(5,"ROC_4");
-		h_hits->GetXaxis()->SetBinLabel(6,"ROC_5");
-		h_hits->GetXaxis()->SetBinLabel(7,"ROC_6");
-		h_hits->GetXaxis()->SetBinLabel(8,"ROC_7");
+		TH1D* h_hits = new TH1D("TotalHits", "Total Hits", 9, -1, 8);
+		h_hits->GetXaxis()->SetBinLabel(1,"X_X");
+		h_hits->GetXaxis()->SetBinLabel(2,"ROC_0");
+		h_hits->GetXaxis()->SetBinLabel(3,"ROC_1");
+		h_hits->GetXaxis()->SetBinLabel(4,"ROC_2");
+		h_hits->GetXaxis()->SetBinLabel(5,"ROC_3");
+		h_hits->GetXaxis()->SetBinLabel(6,"ROC_4");
+		h_hits->GetXaxis()->SetBinLabel(7,"ROC_5");
+		h_hits->GetXaxis()->SetBinLabel(8,"ROC_6");
+		h_hits->GetXaxis()->SetBinLabel(9,"ROC_7");
 
-		TH1InfoClass h[ROC_Size];
+		TH1InfoClass<TH1D> h[ROC_Size];
 		for( int index=0; index<ROC_Size; index++){ 
 			output_f->mkdir(index_ROC[index]);
 			output_f->cd(index_ROC[index]);
@@ -80,11 +74,13 @@ void pixelCheck(){
 		cout<<"Running..."<<endl;	
 		for( int hit=0; hit<tree->GetEntries(); hit++){
 			tree->GetEntry(hit);			
-			if( Hit.ROCnumber < 0 ) continue; //Some Hit.ROCnumber = -1	
 			h_hits->Fill(Hit.ROCnumber);
-			output_f->cd(index_ROC[Hit.ROCnumber]);
+			if( Hit.ROCnumber < 0 ) continue; //Some Hit.ROCnumber = -1	
+			output_f->cd(index_ROC[Hit.ROCnumber]);// Enter the ROC_number directory
+
 				h[Hit.ROCnumber].GetTH1("ROCnumber")->Fill(Hit.ROCnumber);
-			output_f->cd();
+
+			output_f->cd();// Exit
 		}//Hit
 		output_f->Write();
 		cout<<"Success write into "<<output<<" !"<<endl<<endl;	
