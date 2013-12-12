@@ -42,14 +42,13 @@ const char* index_ROC[ROC_Size] = {
 
 void pixelCheck(){
 
-	//for( int isample=0; isample<Sample_Size; isample++){
-	for( int isample=0; isample<1; isample++){
+	for( int isample=0; isample<Sample_Size; isample++){
 		////= Input and prepare the out files ===========================================================================
 		string input  	=    samplePath + "/" + sampleName[isample] + ".root";
 		string output 	= storeRootPath + "/" + sampleName[isample] + ".root";
 		TFile* input_f  = new TFile(input.c_str()); 
 		TFile* output_f = new TFile(output.c_str(),"RECREATE"); 
-		cout<<"Success load "<<sampleName[isample]<<"!"<<endl;	
+		cout<<"Success read "<<input<<" !"<<endl;	
 	
 		////= Regist tree and branch ====================================================================================
 		TTree* tree = (TTree*)input_f->Get("tree");
@@ -77,22 +76,18 @@ void pixelCheck(){
 			output_f->cd(); 
 		}	
 		
-
 		////= Loop for each hit =========================================================================================
-		//for( int hit=0; hit<tree->GetEntries(); hit++){
-		for( int hit=4473975; hit<tree->GetEntries(); hit++){
-		//for( int hit=0; hit<1000; hit++){
+		cout<<"Running..."<<endl;	
+		for( int hit=0; hit<tree->GetEntries(); hit++){
 			tree->GetEntry(hit);			
-			cout<<Hit.ROCnumber<<endl;	
+			if( Hit.ROCnumber < 0 ) continue; //Some Hit.ROCnumber = -1	
 			h_hits->Fill(Hit.ROCnumber);
 			output_f->cd(index_ROC[Hit.ROCnumber]);
 				h[Hit.ROCnumber].GetTH1("ROCnumber")->Fill(Hit.ROCnumber);
-				cout<<"Fill "<<hit<<"/"<<tree->GetEntries()<<" "<<Hit.ROCnumber<<endl;
 			output_f->cd();
 		}//Hit
-		cout<<"Finish"<<endl;	
 		output_f->Write();
-		cout<<"Success write into "<<sampleName[isample]<<"!"<<endl;	
+		cout<<"Success write into "<<output<<" !"<<endl<<endl;	
 	}//sample
 }
 
