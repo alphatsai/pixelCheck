@@ -1,5 +1,6 @@
 #include <fstream>
 #include <iostream>
+#include <sstream>
 #include <cmath>
 #include <map>
 #include <string>
@@ -43,8 +44,14 @@ const char* index_ROC[ROC_Size] = {
 const int Row_Size = 80;
 const int Col_Size = 52;
 
-void pixelCheck(){
+string int2str(int &i){
+	string s;
+	stringstream ss(s);
+	ss << i;
+	return ss.str();
+}
 
+void pixelCheck(){
 	for( int isample=0; isample<Sample_Size; isample++){
 		////= Input and prepare the out files ===========================================================================
 		string input 	=    samplePath + "/" + sampleName[isample] + ".root";
@@ -62,20 +69,22 @@ void pixelCheck(){
 		////= Create Histogram, create sub-directory and initialize variables ===========================================
 		int hits[ROC_Size][Row_Size][Col_Size];
 
-		TH1InfoClass<TH1_Type> h1[ROC_Size];
 		TH2InfoClass<TH2_Type> h2[ROC_Size];
+		TH1InfoClass<TH1_Type> h1[ROC_Size];
 
 		for( int index=0; index<ROC_Size; index++){ 
 			output_f->mkdir(index_ROC[index]);
 			output_f->cd(index_ROC[index]);
-				h1[index].Initialize();
+
 				h2[index].Initialize();
+				h1[index].Initialize();
 				cout<<"Success create TH1 and TH2 in "<<index_ROC[index]<<" !"<<endl;	
+
 			output_f->cd();
 
 			for( int r=0; r<Row_Size; r++){
 				for( int c=0; c<Col_Size; c++){
-					hits[index][r][c]=0;	
+					hits[index][r][c]=0; // inintialize	
 				} // colume
 			} // row
 			 
@@ -92,37 +101,47 @@ void pixelCheck(){
 		h_hits->GetXaxis()->SetBinLabel(8,index_ROC[6]);
 		h_hits->GetXaxis()->SetBinLabel(9,index_ROC[7]);	
 
-		////= Loop for each hit =========================================================================================
+		////= Loop for each hit, Fill Histogram =========================================================================================
 		cout<<"Running..."<<endl;	
 		for( int hit=0; hit<tree->GetEntries(); hit++){
 			tree->GetEntry(hit);			
 			h_hits->Fill(Hit.ROCnumber);
 			if( Hit.ROCnumber < 0 ) continue; 	// Some Hit.ROCnumber = -1	
 			output_f->cd(index_ROC[Hit.ROCnumber]);	// Enter the ROC_number directory
-				
+			
+				string hits_row = "Hits_Row_" + int2str(Hit.row);	
 				h2[Hit.ROCnumber].GetTH2("HitsMap")->Fill(Hit.col,Hit.row);
 				h1[Hit.ROCnumber].GetTH1("ROCnumber")->Fill(Hit.ROCnumber);
-				hits[Hit.ROCnumber][Hit.row][Hit.col]++;
+				h1[Hit.ROCnumber].GetTH1("Row")->Fill(Hit.raw);
+				h1[Hit.ROCnumber].GetTH1("Column")->Fill(Hit.col);
+				if( Hit.raw>=0 && Hit.col>=0 ){
+					h1[Hit.ROCnumber].GetTH1(hits_row)->Fill(Hit.col);	
+					hits[Hit.ROCnumber][Hit.row][Hit.col]++;
+				}
 
 			output_f->cd(); // Exit
 		} // Hit
+
+		for( int i=0; i<ROC_Size; i++){ // Caculate ideal hits for each column in each row
+			for( int j=0; j<Row_Size; j++){
+				string hits_row = "Hits_Row_" + int2str(j) + "_ideal";
+				for( int k=0; k<Col_Size; k++){
+					double idealHits;
+					//if( k>0 && k<Col_Size-1 ){
+					if( k>1 && k<Col_Size-2 ){
+						//idealHits = double( hits[i][j][k+1] + hits[i][j][k-1] )/2;
+						idealHits = double( hits[i][j][k+2] + hits[i][j][k+1] + hits[i][j][k-1] + hits[i][j][k-2])/4;
+					}else{
+						idealHits = hits[i][j][k];
+					}	
+					h1[i].GetTH1(hits_row)->Fill(k,idealHits);
+				} // Column
+			} //Row
+		} // Roc
 		output_f->Write();
 		cout<<"Success write into "<<output<<" !"<<endl<<endl;	
 	} // sample
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

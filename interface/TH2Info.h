@@ -2,10 +2,7 @@
 #define TH2INFO_H
 
 #include <string>
-enum TH2List_{
-	HitsMap_,
-	TH2_Size_,
-};
+#include "enumList.h"
 
 struct TH2Info_{
 	string 	Name;
