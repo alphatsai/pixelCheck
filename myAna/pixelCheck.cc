@@ -52,14 +52,14 @@ void pixelCheck(){
 		////= Create Histogram and sub-directory ========================================================================
 		TH1D* h_hits = new TH1D("TotalHits", "Total Hits", 9, -1, 8);
 		h_hits->GetXaxis()->SetBinLabel(1,"X_X");
-		h_hits->GetXaxis()->SetBinLabel(2,"ROC_0");
-		h_hits->GetXaxis()->SetBinLabel(3,"ROC_1");
-		h_hits->GetXaxis()->SetBinLabel(4,"ROC_2");
-		h_hits->GetXaxis()->SetBinLabel(5,"ROC_3");
-		h_hits->GetXaxis()->SetBinLabel(6,"ROC_4");
-		h_hits->GetXaxis()->SetBinLabel(7,"ROC_5");
-		h_hits->GetXaxis()->SetBinLabel(8,"ROC_6");
-		h_hits->GetXaxis()->SetBinLabel(9,"ROC_7");
+		h_hits->GetXaxis()->SetBinLabel(2,index_ROC[0]);
+		h_hits->GetXaxis()->SetBinLabel(3,index_ROC[1]);
+		h_hits->GetXaxis()->SetBinLabel(4,index_ROC[2]);
+		h_hits->GetXaxis()->SetBinLabel(5,index_ROC[3]);
+		h_hits->GetXaxis()->SetBinLabel(6,index_ROC[4]);
+		h_hits->GetXaxis()->SetBinLabel(7,index_ROC[5]);
+		h_hits->GetXaxis()->SetBinLabel(8,index_ROC[6]);
+		h_hits->GetXaxis()->SetBinLabel(9,index_ROC[7]);
 
 		TH1InfoClass<TH1D> h[ROC_Size];
 		for( int index=0; index<ROC_Size; index++){ 
