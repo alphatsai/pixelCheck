@@ -109,11 +109,13 @@ void pixelCheck(){
 			output_f->cd(); // Exit
 		} // Hit
 
-		for( int i=0; i<ROC_Size; i++){ // Caculate ideal hits for each column in each row
+		// Caculate ideal hits for each column in each row
+		for( int i=0; i<ROC_Size; i++){ 
 			for( int j=0; j<Row_Size; j++){
 				string hits_row   = "Hits_Row_" + int2str(j);
 				string hits_row_i = "Hits_Row_" + int2str(j) + "_ideal";
 				string ratio      = "Ratio_Row_" + int2str(j);
+
 				for( int k=0; k<Col_Size; k++){
 					double idealHits;
 					//if( k>0 && k<Col_Size-1 ){
@@ -125,9 +127,11 @@ void pixelCheck(){
 					}	
 					h1[i].GetTH1(hits_row_i)->Fill(k,idealHits);
 				} // Column
+
 				h1[i].GetTH1(ratio)->Divide( h1[i].GetTH1(hits_row), h1[i].GetTH1(hits_row_i) );	
 			} //Row
 		} // Roc
+
 		output_f->Write();
 		cout<<"Success write into "<<output<<" !"<<endl<<endl;	
 	} // sample
