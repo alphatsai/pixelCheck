@@ -31,6 +31,7 @@ void drawPlots(){
 	setTDRStyle();
 
 	for( int isample=0; isample<Sample_Size; isample++){
+	//for( int isample=0; isample<1; isample++){
 		////= Input and prepare the out files ===========================================================================
 		string input	= storeRootPath + "/" + sampleName[isample] + ".root";
 		TFile* input_f	= new TFile(input.c_str()); 
@@ -54,8 +55,14 @@ void drawPlots(){
 			for( int j=0; j<Row_Size; j++){
 				string hits_row   = "Hits_Row_" + int2str(j);
 				string hits_row_i = "Hits_Row_" + int2str(j) + "_ideal";
-				string output = storePngPath + "/" + sampleName[isample] + index_ROC[i] + "_" + "Row_" + int2str(j) + "_HitsRatio.png";
-					
+				string output;
+				if( j==0 ){
+					output = storePlotsPath + "/" + sampleName[isample] + index_ROC[i] + "_HitsRatio.pdf(";
+				}else if( j==Row_Size-1){
+					output = storePlotsPath + "/" + sampleName[isample] + index_ROC[i] + "_HitsRatio.pdf)";
+				}else{
+					output = storePlotsPath + "/" + sampleName[isample] + index_ROC[i] + "_HitsRatio.pdf";
+				}	
 				h1[i].GetTH1(hits_row)->UseCurrentStyle();	
 				h1[i].GetTH1(hits_row)->SetLineWidth(2);	
 				h1[i].GetTH1(hits_row)->SetLineColor(4);

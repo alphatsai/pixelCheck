@@ -19,7 +19,7 @@ typedef TH2D TH2_Type;
 //
 const string samplePath    = "/afs/cern.ch/work/r/rslu/public/FNAL2013_data"; // All input files should be put int same folder 
 const string storeRootPath = "../result/root";
-const string storePngPath  = "../result/png";
+const string storePlotsPath  = "../result/plots";
 
 const int Sample_Size = 2;
 const string sampleName[Sample_Size] = {
