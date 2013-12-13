@@ -59,7 +59,7 @@ while ( $exit == 0 )
 		cd -
 		screen -list
 		echo "'"'screen -list'"' to check"
-		echo "Host: $HOST"
+		echo "Host: $HOST, record in log/host.log"
 		set exit=1
 	else if ( $op == n ) then
 		cd src
