@@ -24,7 +24,7 @@ while ( $exit == 0 )
 		set exit=1
 	endif
 end
-cd myAna
+cd src
 	echo ""
 	echo "====================== Running ========================"
 	root pixelCheck.cc+ -l -b -q
