@@ -1,4 +1,8 @@
 #!/bin/tcsh
+set where_=`echo $HOST | grep lxplus`
+if ( $where_ != "" ) then
+	cmsenv
+endif
 if ( !( -e result/root ) ) then
 	mkdir -p result/root
 	echo "result/root created "
