@@ -5,26 +5,12 @@
 #include <string>
 #include "TFile.h"
 #include "TH2Info.h"
+#include "TH2InfoVarClass.h"
 using namespace std;
 
 template<typename TH2> 
 class TH2InfoClass{
         public:
-                //Detail info
-                map<string, TH2*> mapTH2;
-                string  Name[TH2_Size_];
-		string 	Title[TH2_Size_];
-		string 	xTitle[TH2_Size_];
-		string 	yTitle[TH2_Size_];
-		string 	xUnit[TH2_Size_];
-		string 	yUnit[TH2_Size_];
-                int     xBin[TH2_Size_];
-                int     yBin[TH2_Size_];
-                double  xMin[TH2_Size_];
-                double  yMin[TH2_Size_];
-                double  xMax[TH2_Size_];
-                double  yMax[TH2_Size_];
-
                 //Fun. of initial TH2
                 TH2InfoClass();
 		void CreateTH2();
@@ -32,52 +18,60 @@ class TH2InfoClass{
 		void SetTitles(); 
                 void Sumw2();
                 TH2* GetTH2(string Name_);
+                TH2InfoVarClass GetVar(string Name_);
+
+	private:
+                //Detail info
+                map<string, TH2*> mapTH2;
+                map<string, int> indexTH2;
+		TH2InfoVarClass Var[TH2_Size_];
+		
 };
 
 // Define function
 template<typename TH2> 
 TH2InfoClass<TH2>::TH2InfoClass(){
         for(int i=0; i<TH2_Size_; i++){ //Loop all kind of TH2
-                Name[i] = TH2Info[i].Name;
-		Title[i] = TH2Info[i].Title;
-		xTitle[i] = TH2Info[i].xTitle;
-		yTitle[i] = TH2Info[i].yTitle;
-		xUnit[i] = TH2Info[i].xUnit;
-		yUnit[i] = TH2Info[i].yUnit;
-                xBin[i]  = TH2Info[i].xBin;
-               	yBin[i]  = TH2Info[i].yBin;
-                xMax[i]  = TH2Info[i].xMax;
-                yMax[i]  = TH2Info[i].yMax;
-                xMin[i]  = TH2Info[i].xMin;
-                yMin[i]  = TH2Info[i].yMin;
+                Var[i].Name = TH2Info[i].Name;
+		Var[i].Title = TH2Info[i].Title;
+		Var[i].xTitle = TH2Info[i].xTitle;
+		Var[i].yTitle = TH2Info[i].yTitle;
+		Var[i].xUnit = TH2Info[i].xUnit;
+		Var[i].yUnit = TH2Info[i].yUnit;
+                Var[i].xBin  = TH2Info[i].xBin;
+               	Var[i].yBin  = TH2Info[i].yBin;
+                Var[i].xMax  = TH2Info[i].xMax;
+                Var[i].yMax  = TH2Info[i].yMax;
+                Var[i].xMin  = TH2Info[i].xMin;
+                Var[i].yMin  = TH2Info[i].yMin;
         }
 }
 template<typename TH2> 
 void TH2InfoClass<TH2>::CreateTH2(){
         for(int i=0; i<TH2_Size_; i++){ 
-                mapTH2[Name[i]] = new TH2(Name[i].c_str(),"",xBin[i], xMin[i], xMax[i], yBin[i], yMin[i], yMax[i]);
+                mapTH2[Var[i].Name] = new TH2(Var[i].Name.c_str(),"",Var[i].xBin, Var[i].xMin, Var[i].xMax, Var[i].yBin, Var[i].yMin, Var[i].yMax);
         }
 
 }
 template<typename TH2> 
 void TH2InfoClass<TH2>::CreateTH2( TFile* f, string dirName="" ){
         for(int i=0; i<TH2_Size_; i++){ 
-                mapTH2[Name[i]] = (TH2*)f->Get( (dirName+Name[i]).c_str());
+                mapTH2[Var[i].Name] = (TH2*)f->Get( (dirName+Var[i].Name).c_str());
         }
 }
 template<typename TH2> 
 void TH2InfoClass<TH2>::SetTitles(){
         for(int i=0; i<TH2_Size_; i++){ 
-                //mapTH2[Name[i]]->SetTile(Title[i].c_str());
-                mapTH2[Name[i]]->SetXTitle( (xTitle[i]+" ["+xUnit[i]+"]").c_str());
-                mapTH2[Name[i]]->SetYTitle( (yTitle[i]+" ["+yUnit[i]+"]").c_str() );
+                //mapTH2[Var[i].Name]->SetTitle(    Var[i].Title.c_str());
+                mapTH2[Var[i].Name]->SetXTitle( Var[i].xTitle.c_str());
+                mapTH2[Var[i].Name]->SetYTitle( Var[i].yTitle.c_str() );
         }
 }
 
 template<typename TH2> 
 void TH2InfoClass<TH2>::Sumw2(){
         for(int i=0; i<TH2_Size_; i++){ 
-                mapTH2.find(Name[i])->second->Sumw2();
+                mapTH2.find(Var[i].Name)->second->Sumw2();
         }
 }
 template<typename TH2> 
@@ -85,4 +79,9 @@ TH2* TH2InfoClass<TH2>::GetTH2(string Name_){
         return mapTH2.find(Name_)->second;
 }
 
+// Get Variables
+template<typename TH2> 
+TH2InfoVarClass TH2InfoClass<TH2>::GetVar(string Name_){
+        return Var[indexTH2.find(Name_)->second];
+}
 #endif

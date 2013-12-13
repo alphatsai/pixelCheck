@@ -5,24 +5,13 @@
 #include <string>
 #include "TFile.h"
 #include "TH1Info.h"
+#include "TH1InfoVarClass.h"
 
 using namespace std;
 
 template<typename TH1> 
 class TH1InfoClass{
         public:
-                //Detail info
-                map<string, TH1*> mapTH1;
-                map<string, int> indexTH1;
-                string  Name[TH1_Size_];
-		string 	Title[TH1_Size_];
-		string 	xTitle[TH1_Size_];
-		string 	yTitle[TH1_Size_];
-		string 	Unit[TH1_Size_];
-                int     Bin[TH1_Size_];
-                double  Min[TH1_Size_];
-                double  Max[TH1_Size_];
-
                 //Fun. of initial TH1
                 TH1InfoClass();
 		void CreateTH1();
@@ -30,6 +19,13 @@ class TH1InfoClass{
 		void SetTitles(); 
                 void Sumw2();
                 TH1* GetTH1(string Name_);
+                TH1InfoVarClass GetVar(string Name_);
+
+	private:
+                //Detail info
+                map<string, TH1*> mapTH1;
+                map<string, int> indexTH1;
+		TH1InfoVarClass Var[TH1_Size_];
 };
 
 /////// Define function ==============================================
@@ -37,15 +33,15 @@ class TH1InfoClass{
 template<typename TH1> 
 TH1InfoClass<TH1>::TH1InfoClass(){
         for(int i=0; i<TH1_Size_; i++){ //Loop all kind of TH1
-                Name[i] = TH1Info[i].Name;
-		Title[i] = TH1Info[i].Title;
-		xTitle[i] = TH1Info[i].xTitle;
-		yTitle[i] = TH1Info[i].yTitle;
-		Unit[i] = TH1Info[i].Unit;
-                Bin[i]  = TH1Info[i].Bin;
-                Max[i]  = TH1Info[i].Max;
-                Min[i]  = TH1Info[i].Min;
-		indexTH1[Name[i]]=i;
+                Var[i].Name  = TH1Info[i].Name;
+		Var[i].Title = TH1Info[i].Title;
+		Var[i].xTitle = TH1Info[i].xTitle;
+		Var[i].yTitle = TH1Info[i].yTitle;
+		Var[i].Unit = TH1Info[i].Unit;
+                Var[i].Bin  = TH1Info[i].Bin;
+                Var[i].Max  = TH1Info[i].Max;
+                Var[i].Min  = TH1Info[i].Min;
+		indexTH1[Var[i].Name]=i;
         }
 
 }
@@ -54,7 +50,7 @@ TH1InfoClass<TH1>::TH1InfoClass(){
 template<typename TH1> 
 void TH1InfoClass<TH1>::CreateTH1(){
         for(int i=0; i<TH1_Size_; i++){
-                mapTH1[Name[i]] = new TH1(Name[i].c_str(),"",Bin[i], Min[i], Max[i]);
+                mapTH1[Var[i].Name] = new TH1(Var[i].Name.c_str(),"",Var[i].Bin, Var[i].Min, Var[i].Max);
         }
 
 }
@@ -62,7 +58,7 @@ void TH1InfoClass<TH1>::CreateTH1(){
 template<typename TH1> 
 void TH1InfoClass<TH1>::CreateTH1( TFile* f, string dirName="" ){
         for(int i=0; i<TH1_Size_; i++){ 
-                mapTH1[Name[i]] =(TH1*)f->Get( (dirName+Name[i]).c_str() );
+                mapTH1[Var[i].Name] =(TH1*)f->Get( (dirName+Var[i].Name).c_str() );
         }
 
 }
@@ -71,16 +67,16 @@ void TH1InfoClass<TH1>::CreateTH1( TFile* f, string dirName="" ){
 template<typename TH1> 
 void TH1InfoClass<TH1>::SetTitles(){
         for(int i=0; i<TH1_Size_; i++){ 
-                //mapTH1[Name[i]]->SetTile(Title[i].c_str());
-                mapTH1[Name[i]]->SetXTitle( (xTitle[i]+" ["+Unit[i]+"]").c_str());
-                mapTH1[Name[i]]->SetYTitle( yTitle[i].c_str() );
+                //mapTH1[Var[i].Name]->SetTile(Var[i].Title.c_str());
+                mapTH1[Var[i].Name]->SetXTitle( (Var[i].xTitle+" ["+Var[i].Unit+"]").c_str());
+                mapTH1[Var[i].Name]->SetYTitle( Var[i].yTitle.c_str() );
         }
 }
  
 template<typename TH1> 
 void TH1InfoClass<TH1>::Sumw2(){
         for(int i=0; i<TH1_Size_; i++){ 
-                mapTH1.find(Name[i])->second->Sumw2();
+                mapTH1.find(Var[i].Name)->second->Sumw2();
         }
 }
 
@@ -88,6 +84,12 @@ void TH1InfoClass<TH1>::Sumw2(){
 template<typename TH1> 
 TH1* TH1InfoClass<TH1>::GetTH1(string Name_){
         return mapTH1.find(Name_)->second;
+}
+
+// Get Variables
+template<typename TH1> 
+TH1InfoVarClass TH1InfoClass<TH1>::GetVar(string Name_){
+        return Var[indexTH1.find(Name_)->second];
 }
 
 #endif

@@ -1,3 +1,6 @@
+#ifndef SETTDRSTYLE_H
+#define SETTDRSTYLE_H
+
 #include "TStyle.h"
 
 void setTDRStyle() {
@@ -145,4 +148,4 @@ void setTDRStyle() {
   tdrStyle->cd();
 
 }
-
+#endif
