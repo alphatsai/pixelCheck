@@ -104,10 +104,10 @@ void pixelCheck(){
 
 				for( int k=0; k<Col_Size; k++){
 					double idealHits;
-					//if( k>0 && k<Col_Size-1 ){
-					if( k>1 && k<Col_Size-2 ){
-						//idealHits = double( hits[i][j][k+1] + hits[i][j][k-1] )/2;
-						idealHits = double( hits[i][j][k+2] + hits[i][j][k+1] + hits[i][j][k-1] + hits[i][j][k-2])/4;
+					if( k>0 && k<Col_Size-1 ){
+					//if( k>1 && k<Col_Size-2 ){
+						idealHits = double( hits[i][j][k+1] + hits[i][j][k-1] )/2;
+						//idealHits = double( hits[i][j][k+2] + hits[i][j][k+1] + hits[i][j][k-1] + hits[i][j][k-2])/4;
 					}else{
 						idealHits = hits[i][j][k];
 					}	
