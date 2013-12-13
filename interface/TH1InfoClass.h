@@ -2,6 +2,7 @@
 #define TH1INFOCLASS_H
 
 #include <map>
+#include "TFile.h"
 #include "TH1Info.h"
 using namespace std;
 
@@ -20,16 +21,16 @@ class TH1InfoClass{
                 double  Max[TH1_Size_];
 
                 //Fun. of initial TH1
-                //TH1InfoClass();
-		void Initialize();
+                TH1InfoClass();
+		void CreateTH1();
+		void CreateTH1(TFile* f);
                 void Sumw2();
                 TH1* GetTH1(string Name_);
 };
 
 // Define function
-//TH1InfoClass::TH1InfoClass(){
 template<typename TH1> 
-void TH1InfoClass<TH1>::Initialize(){
+TH1InfoClass<TH1>::TH1InfoClass(){
         for(int i=0; i<TH1_Size_; i++){ //Loop all kind of TH1
                 Name[i] = TH1Info[i].Name;
 		Title[i] = TH1Info[i].Title;
@@ -39,7 +40,20 @@ void TH1InfoClass<TH1>::Initialize(){
                 Bin[i]  = TH1Info[i].Bin;
                 Max[i]  = TH1Info[i].Max;
                 Min[i]  = TH1Info[i].Min;
+        }
+
+}
+template<typename TH1> 
+void TH1InfoClass<TH1>::CreateTH1(){
+        for(int i=0; i<TH1_Size_; i++){ //Loop all kind of TH1
                 mapTH1[Name[i]] = new TH1(Name[i].c_str(),"",Bin[i], Min[i], Max[i]);
+        }
+
+}
+template<typename TH1> 
+void TH1InfoClass<TH1>::CreateTH1( TFile* f ){
+        for(int i=0; i<TH1_Size_; i++){ //Loop all kind of TH1
+                mapTH1[Name[i]] =(TH1*)f->Get(Name[i].c_str());
         }
 
 }

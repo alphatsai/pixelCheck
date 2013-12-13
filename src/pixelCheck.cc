@@ -63,8 +63,8 @@ void pixelCheck(){
 			output_f->mkdir(index_ROC[index]);
 			output_f->cd(index_ROC[index]);
 
-				h2[index].Initialize();
-				h1[index].Initialize();
+				h2[index].CreateTH2();
+				h1[index].CreateTH1();
 				cout<<"Success create TH1 and TH2 in "<<index_ROC[index]<<" !"<<endl;	
 
 			output_f->cd();
