@@ -29,6 +29,7 @@ class TH2InfoClass{
                 TH2InfoClass();
 		void CreateTH2();
 		void CreateTH2( TFile* f, string dirName ); // dirName, ex: "ROC_1/"
+		void SetTitles(); 
                 void Sumw2();
                 TH2* GetTH2(string Name_);
 };
@@ -64,6 +65,15 @@ void TH2InfoClass<TH2>::CreateTH2( TFile* f, string dirName="" ){
                 mapTH2[Name[i]] = (TH2*)f->Get( (dirName+Name[i]).c_str());
         }
 }
+template<typename TH2> 
+void TH2InfoClass<TH2>::SetTitles(){
+        for(int i=0; i<TH2_Size_; i++){ 
+                //mapTH2[Name[i]]->SetTile(Title[i].c_str());
+                mapTH2[Name[i]]->SetXTitle( (xTitle[i]+" ["+xUnit[i]+"]").c_str());
+                mapTH2[Name[i]]->SetYTitle( (yTitle[i]+" ["+yUnit[i]+"]").c_str() );
+        }
+}
+
 template<typename TH2> 
 void TH2InfoClass<TH2>::Sumw2(){
         for(int i=0; i<TH2_Size_; i++){ 
