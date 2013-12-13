@@ -2,6 +2,8 @@
 #define TH2INFOCLASS_H
 
 #include <map>
+#include <string>
+#include "TFile.h"
 #include "TH2Info.h"
 using namespace std;
 
@@ -26,7 +28,7 @@ class TH2InfoClass{
                 //Fun. of initial TH2
                 TH2InfoClass();
 		void CreateTH2();
-		void CreateTH2( TFile* f );
+		void CreateTH2( TFile* f, string dirName ); // dirName, ex: "ROC_1/"
                 void Sumw2();
                 TH2* GetTH2(string Name_);
 };
@@ -51,20 +53,20 @@ TH2InfoClass<TH2>::TH2InfoClass(){
 }
 template<typename TH2> 
 void TH2InfoClass<TH2>::CreateTH2(){
-        for(int i=0; i<TH2_Size_; i++){ //Loop all kind of TH2
+        for(int i=0; i<TH2_Size_; i++){ 
                 mapTH2[Name[i]] = new TH2(Name[i].c_str(),"",xBin[i], xMin[i], xMax[i], yBin[i], yMin[i], yMax[i]);
         }
 
 }
 template<typename TH2> 
-void TH2InfoClass<TH2>::CreateTH2( TFile* f ){
-        for(int i=0; i<TH2_Size_; i++){ //Loop all kind of TH2
-                mapTH2[Name[i]] = (TH2*)f->Get(Name[i].c_str());
+void TH2InfoClass<TH2>::CreateTH2( TFile* f, string dirName="" ){
+        for(int i=0; i<TH2_Size_; i++){ 
+                mapTH2[Name[i]] = (TH2*)f->Get( (dirName+Name[i]).c_str());
         }
 }
 template<typename TH2> 
 void TH2InfoClass<TH2>::Sumw2(){
-        for(int i=0; i<TH2_Size_; i++){ //Loop all kind of TH2
+        for(int i=0; i<TH2_Size_; i++){ 
                 mapTH2.find(Name[i])->second->Sumw2();
         }
 }
