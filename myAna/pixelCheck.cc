@@ -7,42 +7,13 @@
 #include <vector>
 #include "TMath.h"
 #include "TFile.h"
-#include "TH1D.h"
-#include "TH2D.h"
+#include "../interface/Parameters.h"	// Define parameters, input/output files
 #include "../interface/format.h"
 #include "../interface/TH1Info.h"	// Histogram details are defined here
 #include "../interface/TH1InfoClass.h"	 
 #include "../interface/TH2Info.h"	// Histogram details are defined here
 #include "../interface/TH2InfoClass.h"	 
 using namespace std;
-
-typedef TH1D TH1_Type;
-typedef TH2D TH2_Type;
-
-const string samplePath    = "/afs/cern.ch/work/r/rslu/public/FNAL2013_data";
-const string storeRootPath = "../result/root";
-const string storePngPath  = "../result/png";
-
-const int Sample_Size = 2;
-const string sampleName[Sample_Size] = {
-	"tree_34318_",
-	"tree_35113_"
-};
-
-const int ROC_Size = 8;
-const char* index_ROC[ROC_Size] = {
-	"ROC_0",
-	"ROC_1",
-	"ROC_2",
-	"ROC_3",
-	"ROC_4",
-	"ROC_5",
-	"ROC_6",
-	"ROC_7",
-};
-
-const int Row_Size = 80;
-const int Col_Size = 52;
 
 string int2str(int &i){
 	string s;
