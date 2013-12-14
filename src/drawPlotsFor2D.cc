@@ -32,7 +32,6 @@ string int2str(int &i){
 template<typename TH2>
 void drawTH2( TCanvas* c2, TH2* h, string title, double xT, double yT, string savePath){
 	TText* Title = new TText(xT,yT, title.c_str()); 
-	//h->SetTitle(title.c_str());
 	h->SetFillColor(0);
 	h->Draw("COLZ");
 	Title->Draw("SAME");
