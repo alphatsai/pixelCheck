@@ -93,10 +93,10 @@ void setTDRStyleFor2D() {
   tdrStyle2->SetTitleFontSize(0.05);
   // tdrStyle2->SetTitleH(0); // Set the height of the title box
   // tdrStyle2->SetTitleW(0); // Set the width of the title box
-  // tdrStyle2->SetTitleX(0); // Set the position of the title box
+   tdrStyle2->SetTitleX(0.35); // Set the position of the title box
   // tdrStyle2->SetTitleY(0.985); // Set the position of the title box
   // tdrStyle2->SetTitleStyle(Style_t style = 1212);
-  // tdrStyle2->SetTitleBorderSize(2);
+   tdrStyle2->SetTitleBorderSize(0);
 
 // For the axis titles:
   tdrStyle2->SetTitleColor(1, "XYZ");
