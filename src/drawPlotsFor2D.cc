@@ -35,7 +35,7 @@ void drawTH2( TCanvas* c2, TH2* h, string title, double xT, double yT, string sa
 	h->SetFillColor(0);
 	h->Draw("COLZ");
 	Title->Draw("SAME");
-	//c2->SaveAs(savePath.c_str());
+	c2->SaveAs(savePath.c_str());
 }
 
 
@@ -43,7 +43,7 @@ void drawPlotsFor2D(){
 	
 	setTDRStyleFor2D();	
 	
-	//for( int isample=0; isample<1; isample++){
+	TCanvas* c2 = new TCanvas("c2", "", 960, 700);
 	for( int isample=0; isample<Sample_Size; isample++){
 		////= Input and prepare the out files ===========================================================================
 		string input	= storeRootPath + "/" + sampleName[isample] + ".root";
@@ -63,10 +63,9 @@ void drawPlotsFor2D(){
 		////= Loop for each hit, Fill Histogram =========================================================================================
 		cout<<"Running..."<<endl;	
 	
-		TCanvas* c2 = new TCanvas("c2", "", 960, 700);
 		for( int i=0; i<ROC_Size; i++){ 
 			for( int th2=0; th2<TH2_Size_; th2++){
-				string saveTH2 = storePlotsPath + "/" + index_ROC[i] + "_" + TH2Info[th2].Name + ".png";
+				string saveTH2 = storePlotsPath + "/" + sampleName[isample] + index_ROC[i] + "_" + TH2Info[th2].Name + ".png";
 				string title = index_ROC[i] + " " + TH2Info[th2].Title;
 				h2[i].GetTH2(TH2Info[th2].Name)->UseCurrentStyle();
 				drawTH2(c2, h2[i].GetTH2(TH2Info[th2].Name),title, Col_Size/2.8,Row_Size+2, saveTH2);
