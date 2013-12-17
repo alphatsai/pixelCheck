@@ -19,6 +19,7 @@ class TH2InfoClass{
                 void Sumw2();
                 TH2* GetTH2(string Name_);
                 TH2InfoVarClass GetVar(string Name_);
+                TH2InfoVarClass GetVar(int index);
 
 	private:
                 //Detail info
@@ -83,5 +84,9 @@ TH2* TH2InfoClass<TH2>::GetTH2(string Name_){
 template<typename TH2> 
 TH2InfoVarClass TH2InfoClass<TH2>::GetVar(string Name_){
         return Var[indexTH2.find(Name_)->second];
+}
+template<typename TH2> 
+TH2InfoVarClass TH2InfoClass<TH2>::GetVar(int index){
+        return Var[index];
 }
 #endif

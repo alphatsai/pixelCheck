@@ -11,3 +11,4 @@ if ( $where_ != "" ) then
 endif
 rm -f ../log/drawPlots.log
 root drawPlots.cc+ -l -b -q >&! ../log/drawPlots.log
+date >> ../log/drawPlots.log

@@ -20,6 +20,7 @@ class TH1InfoClass{
                 void Sumw2();
                 TH1* GetTH1(string Name_);
                 TH1InfoVarClass GetVar(string Name_);
+                TH1InfoVarClass GetVar(int index);
 
 	private:
                 //Detail info
@@ -90,6 +91,10 @@ TH1* TH1InfoClass<TH1>::GetTH1(string Name_){
 template<typename TH1> 
 TH1InfoVarClass TH1InfoClass<TH1>::GetVar(string Name_){
         return Var[indexTH1.find(Name_)->second];
+}
+template<typename TH1> 
+TH1InfoVarClass TH1InfoClass<TH1>::GetVar(int index){
+        return Var[index];
 }
 
 #endif

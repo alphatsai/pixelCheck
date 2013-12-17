@@ -104,12 +104,10 @@ void pixelCheck(){
 
 				for( int k=0; k<Col_Size; k++){
 					double idealHits;
-					if( k>0 && k<Col_Size-1 ){
-					//if( k>1 && k<Col_Size-2 ){
-						idealHits = double( hits[i][j][k+1] + hits[i][j][k-1] )/2;
-						//idealHits = double( hits[i][j][k+2] + hits[i][j][k+1] + hits[i][j][k-1] + hits[i][j][k-2])/4;
+					if( k%2==1 ){ // Odd cloumn
+						idealHits =  hits[i][j][k-1];
 					}else{
-						idealHits = hits[i][j][k];
+						idealHits = hits[i][j][k+1];
 					}	
 					h1[i].GetTH1(hits_row_i)->Fill(k,idealHits);
 				} // Column
@@ -125,5 +123,27 @@ void pixelCheck(){
 
 
 
+		// Caculate ideal hits for each column in each row
+/*		for( int i=0; i<ROC_Size; i++){ 
+			for( int j=0; j<Row_Size; j++){
+				string hits_row   = "Hits_Row_" + int2str(j);
+				string hits_row_i = "Hits_Row_" + int2str(j) + "_ideal";
+				string ratio      = "Ratio_Row_" + int2str(j);
 
+				for( int k=0; k<Col_Size; k++){
+					double idealHits;
+					if( k>0 && k<Col_Size-1 ){
+					//if( k>1 && k<Col_Size-2 ){
+						idealHits = double( hits[i][j][k+1] + hits[i][j][k-1] )/2;
+						//idealHits = double( hits[i][j][k+2] + hits[i][j][k+1] + hits[i][j][k-1] + hits[i][j][k-2])/4;
+					}else{
+						idealHits = hits[i][j][k];
+					}	
+					h1[i].GetTH1(hits_row_i)->Fill(k,idealHits);
+				} // Column
+
+				h1[i].GetTH1(ratio)->Divide( h1[i].GetTH1(hits_row), h1[i].GetTH1(hits_row_i) );	
+			} //Row
+		} // Roc
+*/
 
