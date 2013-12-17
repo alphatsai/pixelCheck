@@ -14,7 +14,7 @@ endif
 set exit=0
 while ( $exit == 0 )
 	echo "########################################################"
-	echo "##                      Part 1/3                      ##"
+	echo "##                      Part 1/4                      ##"
 	echo "##      Store plots in .root files '"'result/root'"'      ##"
 	echo "## Would you like to change some parameters(y/n/q/p)? ##"
 	echo "##         y(Edit), n(Run), q(Quit), p(Skip)          ##"		
@@ -43,7 +43,7 @@ end
 set exit=0
 while ( $exit == 0 )
 	echo "######################################################"
-	echo "##                     Part 2/3                     ##"
+	echo "##                     Part 2/4                     ##"
 	echo "##        Create some 2D plots '"'result/plots'"'       ##"
 	echo "##      NOTE: Please make sure you can use root     ##"
 	echo "##                                                  ##"
@@ -78,12 +78,11 @@ while ( $exit == 0 )
 		set exit=1
 	endif
 end
-
 set exit=0
 while ( $exit == 0 )
 	echo "######################################################"
-	echo "##                     Part 3/3                     ##"
-	echo "##       Create some pdf plots '"'result/plots'"'       ##"
+	echo "##                     Part 3/4                     ##"
+	echo "##       Create some PNG plots '"'result/plots'"'       ##"
 	echo "##      NOTE: Please make sure you can use root     ##"
 	echo "##                                                  ##"
 	echo "##   Would you like to use screen to run the macro  ##"
@@ -98,6 +97,42 @@ while ( $exit == 0 )
 		echo "========== screen job's name is createPdf ============="
 		echo "================= log files in ./log =================="
 		cd src
+			screen -dmS createPng ./screenRun.csh
+		cd -
+		screen -list
+		echo "'"'screen -list'"' to check"
+		echo "Host: $HOST, record in log/host.log"
+		set exit=1
+	else if ( $op == n ) then
+		cd src
+			echo ""
+			echo "                For src/drawPlots.cc                  "
+			echo "====================== Running ========================"
+			root drawPlots.cc+ -l -b -q	
+			echo "====================== The End ========================"
+			set exit=1
+		cd -
+	endif
+end
+set exit=0
+while ( $exit == 0 )
+	echo "######################################################"
+	echo "##                     Part 4/4                     ##"
+	echo "##       Create some PDF plots '"'result/plots'"'       ##"
+	echo "##      NOTE: Please make sure you can use root     ##"
+	echo "##                                                  ##"
+	echo "##   Would you like to use screen to run the macro  ##"
+	echo "##         y(yes), n(run directly), q(Quit)         ##"		
+	echo "######################################################"
+	set op = $<
+	if ( $op == q ) then
+		exit
+	else if ( $op == y ) then
+		echo ""
+		echo "               For src/drawPlotsPdf.cc                  "
+		echo "========== screen job's name is createPdf ============="
+		echo "================= log files in ./log =================="
+		cd src
 			screen -dmS createPdf ./screenRun.csh
 		cd -
 		screen -list
@@ -107,9 +142,9 @@ while ( $exit == 0 )
 	else if ( $op == n ) then
 		cd src
 			echo ""
-			echo "                 For src/drawPlots.cc                  "
+			echo "              For src/drawPlotsPdf.cc                  "
 			echo "====================== Running ========================"
-			root drawPlots.cc+ -l -b -q	
+			root drawPlotsPdf.cc+ -l -b -q	
 			echo "====================== The End ========================"
 			set exit=1
 		cd -
