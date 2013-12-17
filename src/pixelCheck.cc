@@ -17,7 +17,7 @@
 using namespace std;
 
 // Change int to string
-string int2str(int &i){
+string int2str(int i){
 	string s;
 	stringstream ss(s);
 	ss << i;
@@ -80,23 +80,44 @@ void pixelCheck(){
 			tree->GetEntry(hit);			
 			h_hits->Fill(Hit.ROCnumber);
 			if( Hit.ROCnumber < 0 ) continue; 	// Some Hit.ROCnumber = -1	
-			output_f->cd(index_ROC[Hit.ROCnumber].c_str());	// Enter the ROC_number directory
+			//output_f->cd(index_ROC[Hit.ROCnumber].c_str());	// Enter the ROC_number directory
 			
-				string hits_row = "Hits_Row_" + int2str(Hit.row);	
 				h2[Hit.ROCnumber].GetTH2("HitsMap")->Fill(Hit.col,Hit.row);
 				h1[Hit.ROCnumber].GetTH1("ROCnumber")->Fill(Hit.ROCnumber);
 				h1[Hit.ROCnumber].GetTH1("Row")->Fill(Hit.raw);
 				h1[Hit.ROCnumber].GetTH1("Column")->Fill(Hit.col);
 				if( Hit.raw>=0 && Hit.col>=0 ){
+					string hits_row = "Hits_Row_" + int2str(Hit.row);	
 					h1[Hit.ROCnumber].GetTH1(hits_row)->Fill(Hit.col);	
 					hits[Hit.ROCnumber][Hit.row][Hit.col]++;
+
+					if( Hit.col%2==0 ){ //Fill event column : 0,2,4,6....
+						string hits_2col   = "Hits_2Col_" + int2str(Hit.col) + "." + int2str(int(Hit.col+1));	
+						string hits_2col_i = "Hits_2Col_" + int2str(Hit.col) + "." + int2str(Hit.col+1) + "_ideal";	
+						h1[Hit.ROCnumber].GetTH1(hits_2col)->Fill(Hit.row);
+						h1[Hit.ROCnumber].GetTH1(hits_2col_i)->Fill((159-Hit.row));
+
+					}else{ //Fill odd column : 1,3,5,....
+						string hits_2col   = "Hits_2Col_" + int2str(Hit.col-1) + "." + int2str(Hit.col);	
+						string hits_2col_i = "Hits_2Col_" + int2str(Hit.col-1) + "." + int2str(Hit.col) + "_ideal";	
+						h1[Hit.ROCnumber].GetTH1(hits_2col)->Fill((159-Hit.row));
+						h1[Hit.ROCnumber].GetTH1(hits_2col_i)->Fill(Hit.row);
+					}
+					
 				}
 
-			output_f->cd(); // Exit
+			//output_f->cd(); // Exit
 		} // Hit
 
 		// Caculate ideal hits for each column in each row
-		for( int i=0; i<ROC_Size; i++){ 
+		for( int i=0; i<ROC_Size; i++){
+			for( int j=0; j<Col_Size/2; j++){
+				string hits_2col   = "Hits_2Col_" + int2str(j*2) + "." + int2str(j*2+1);
+				string hits_2col_i = "Hits_2Col_" + int2str(j*2) + "." + int2str(j*2+1) + "_ideal";
+				string ratio      = "Ratio_2Col_" + int2str(j*2) + "." + int2str(j*2+1);
+				h1[i].GetTH1(ratio)->Divide( h1[i].GetTH1(hits_2col), h1[i].GetTH1(hits_2col_i) );
+			}
+ 
 			for( int j=0; j<Row_Size; j++){
 				string hits_row   = "Hits_Row_" + int2str(j);
 				string hits_row_i = "Hits_Row_" + int2str(j) + "_ideal";

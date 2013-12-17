@@ -8,11 +8,21 @@ const string Hits_Row_Title1 = "Hits in Row ";
 const string Hits_Row_Title2 = "Ideal Hits in Row ";
 const string Hits_Row_xTitle = "Column";
 const string Hits_Row_yTitle = "Hits";
-const string Ratio_Row_Title  = "Ratio of Hits in Row, Ratio=Real/Ideal ";
+const string Ratio_Row_Title  = "Ratio of Hits in Row, Ratio=Record/Ideal ";
 const string Ratio_Row_yTitle = "Ratio";
 const int    Hits_Row_Bin = 53;
 const double Hits_Row_Min = 0;
 const double Hits_Row_Max = 53;
+
+const string Hits_2Col_Title1 = "Hits in double Column ";
+const string Hits_2Col_Title2 = "Ideal Hits in double Column ";
+const string Hits_2Col_xTitle = "Row";
+const string Hits_2Col_yTitle = "Hits";
+const string Ratio_2Col_Title  = "Ratio of Hits in double Column, Ratio=Record/Ideal ";
+const string Ratio_2Col_yTitle = "Ratio";
+const int    Hits_2Col_Bin = 161;
+const double Hits_2Col_Min = 0;
+const double Hits_2Col_Max = 161;
 
 struct TH1Info_{
 	string 	Name;
@@ -29,6 +39,85 @@ struct TH1Info_ TH1Info[TH1_Size_] = {
 	{ "ROCnumber", 	"ROC Number", 	"Number", 	"Hits", 	"", 	8, 0, 8},
 	{ "Row", 	"Row Hits", 	"Row", 		"Hits", 	"", 	82, -1, 81},
 	{ "Column", 	"Column Hits", 	"Column", 	"Hits", 	"", 	54, -1, 53},
+
+	{ "Hits_2Col_0.1",		(Hits_2Col_Title1+"[0,1]"), Hits_2Col_xTitle, Hits_2Col_yTitle,		"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_0.1_ideal",	(Hits_2Col_Title2+"[0,1]"), Hits_2Col_xTitle, Hits_2Col_yTitle,		"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Ratio_2Col_0.1",		(Ratio_2Col_Title+"[0,1]"), Hits_2Col_xTitle, Ratio_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_2.3",		(Hits_2Col_Title1+"[2,3]"), Hits_2Col_xTitle, Hits_2Col_yTitle,		"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_2.3_ideal",	(Hits_2Col_Title2+"[2,3]"), Hits_2Col_xTitle, Hits_2Col_yTitle,		"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Ratio_2Col_2.3",		(Ratio_2Col_Title+"[2,3]"), Hits_2Col_xTitle, Ratio_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_4.5",		(Hits_2Col_Title1+"[4,5]"), Hits_2Col_xTitle, Hits_2Col_yTitle,		"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_4.5_ideal",	(Hits_2Col_Title2+"[4,5]"), Hits_2Col_xTitle, Hits_2Col_yTitle,		"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Ratio_2Col_4.5",		(Ratio_2Col_Title+"[4,5]"), Hits_2Col_xTitle, Ratio_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_6.7",		(Hits_2Col_Title1+"[6,7]"), Hits_2Col_xTitle, Hits_2Col_yTitle,		"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_6.7_ideal",	(Hits_2Col_Title2+"[6,7]"), Hits_2Col_xTitle, Hits_2Col_yTitle,		"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Ratio_2Col_6.7",		(Ratio_2Col_Title+"[6,7]"), Hits_2Col_xTitle, Ratio_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_8.9",		(Hits_2Col_Title1+"[8,9]"), Hits_2Col_xTitle, Hits_2Col_yTitle,		"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_8.9_ideal",	(Hits_2Col_Title2+"[8,9]"), Hits_2Col_xTitle, Hits_2Col_yTitle,		"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Ratio_2Col_8.9",		(Ratio_2Col_Title+"[8,9]"), Hits_2Col_xTitle, Ratio_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_10.11",		(Hits_2Col_Title1+"[10,11]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_10.11_ideal",	(Hits_2Col_Title2+"[10,11]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Ratio_2Col_10.11",		(Ratio_2Col_Title+"[10,11]"), Hits_2Col_xTitle, Ratio_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_12.13",		(Hits_2Col_Title1+"[12,13]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_12.13_ideal",	(Hits_2Col_Title2+"[12,13]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Ratio_2Col_12.13",		(Ratio_2Col_Title+"[12,13]"), Hits_2Col_xTitle, Ratio_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_14.15",		(Hits_2Col_Title1+"[14,15]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_14.15_ideal",	(Hits_2Col_Title2+"[14,15]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Ratio_2Col_14.15",		(Ratio_2Col_Title+"[14,15]"), Hits_2Col_xTitle, Ratio_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_16.17",		(Hits_2Col_Title1+"[16,17]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_16.17_ideal",	(Hits_2Col_Title2+"[16,17]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Ratio_2Col_16.17",		(Ratio_2Col_Title+"[16,17]"), Hits_2Col_xTitle, Ratio_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_18.19",		(Hits_2Col_Title1+"[18,19]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_18.19_ideal",	(Hits_2Col_Title2+"[18,19]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Ratio_2Col_18.19",		(Ratio_2Col_Title+"[18,19]"), Hits_2Col_xTitle, Ratio_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_20.21",		(Hits_2Col_Title1+"[20,21]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_20.21_ideal",	(Hits_2Col_Title2+"[20,21]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Ratio_2Col_20.21",		(Ratio_2Col_Title+"[20,21]"), Hits_2Col_xTitle, Ratio_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_22.23",		(Hits_2Col_Title1+"[22,23]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_22.23_ideal",	(Hits_2Col_Title2+"[22,23]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Ratio_2Col_22.23",		(Ratio_2Col_Title+"[22,23]"), Hits_2Col_xTitle, Ratio_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_24.25",		(Hits_2Col_Title1+"[24,25]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_24.25_ideal",	(Hits_2Col_Title2+"[24,25]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Ratio_2Col_24.25",		(Ratio_2Col_Title+"[24,25]"), Hits_2Col_xTitle, Ratio_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_26.27",		(Hits_2Col_Title1+"[26,27]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_26.27_ideal",	(Hits_2Col_Title2+"[26,27]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Ratio_2Col_26.27",		(Ratio_2Col_Title+"[26,27]"), Hits_2Col_xTitle, Ratio_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_28.29",		(Hits_2Col_Title1+"[28,29]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_28.29_ideal",	(Hits_2Col_Title2+"[28,29]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Ratio_2Col_28.29",		(Ratio_2Col_Title+"[28,29]"), Hits_2Col_xTitle, Ratio_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_30.31",		(Hits_2Col_Title1+"[30,31]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_30.31_ideal",	(Hits_2Col_Title2+"[30,31]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Ratio_2Col_30.31",		(Ratio_2Col_Title+"[30,31]"), Hits_2Col_xTitle, Ratio_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_32.33",		(Hits_2Col_Title1+"[32,33]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_32.33_ideal",	(Hits_2Col_Title2+"[32,33]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Ratio_2Col_32.33",		(Ratio_2Col_Title+"[32,33]"), Hits_2Col_xTitle, Ratio_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_34.35",		(Hits_2Col_Title1+"[34,35]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_34.35_ideal",	(Hits_2Col_Title2+"[34,35]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Ratio_2Col_34.35",		(Ratio_2Col_Title+"[34,35]"), Hits_2Col_xTitle, Ratio_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_36.37",		(Hits_2Col_Title1+"[36,37]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_36.37_ideal",	(Hits_2Col_Title2+"[36,37]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Ratio_2Col_36.37",		(Ratio_2Col_Title+"[36,37]"), Hits_2Col_xTitle, Ratio_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_38.39",		(Hits_2Col_Title1+"[38,39]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_38.39_ideal",	(Hits_2Col_Title2+"[38,39]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Ratio_2Col_38.39",		(Ratio_2Col_Title+"[38,39]"), Hits_2Col_xTitle, Ratio_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_40.41",		(Hits_2Col_Title1+"[40,41]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_40.41_ideal",	(Hits_2Col_Title2+"[40,41]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Ratio_2Col_40.41",		(Ratio_2Col_Title+"[40,41]"), Hits_2Col_xTitle, Ratio_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_42.43",		(Hits_2Col_Title1+"[42,43]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_42.43_ideal",	(Hits_2Col_Title2+"[42,43]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Ratio_2Col_42.43",		(Ratio_2Col_Title+"[42,43]"), Hits_2Col_xTitle, Ratio_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_44.45",		(Hits_2Col_Title1+"[44,45]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_44.45_ideal",	(Hits_2Col_Title2+"[44,45]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Ratio_2Col_44.45",		(Ratio_2Col_Title+"[44,45]"), Hits_2Col_xTitle, Ratio_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_46.47",		(Hits_2Col_Title1+"[46,47]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_46.47_ideal",	(Hits_2Col_Title2+"[46,47]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Ratio_2Col_46.47",		(Ratio_2Col_Title+"[46,47]"), Hits_2Col_xTitle, Ratio_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_48.49",		(Hits_2Col_Title1+"[48,49]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_48.49_ideal",	(Hits_2Col_Title2+"[48,49]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Ratio_2Col_48.49",		(Ratio_2Col_Title+"[48,49]"), Hits_2Col_xTitle, Ratio_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_50.51",		(Hits_2Col_Title1+"[50,51]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Hits_2Col_50.51_ideal",	(Hits_2Col_Title2+"[50,51]"), Hits_2Col_xTitle, Hits_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
+	{ "Ratio_2Col_50.51",		(Ratio_2Col_Title+"[50,51]"), Hits_2Col_xTitle, Ratio_2Col_yTitle,	"",	Hits_2Col_Bin, Hits_2Col_Min, Hits_2Col_Max},
 
 	{ "Hits_Row_0",		(Hits_Row_Title1+"0"), Hits_Row_xTitle, Hits_Row_yTitle,	"",	Hits_Row_Bin, Hits_Row_Min, Hits_Row_Max},
 	{ "Hits_Row_0_ideal",	(Hits_Row_Title2+"0"), Hits_Row_xTitle, Hits_Row_yTitle,	"",	Hits_Row_Bin, Hits_Row_Min, Hits_Row_Max},
