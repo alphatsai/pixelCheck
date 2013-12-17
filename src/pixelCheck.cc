@@ -40,7 +40,6 @@ void pixelCheck(){
 		cout<<"Success register tree!"<<endl;	
 
 		////= Create Histogram, create sub-directory and initialize variables ===========================================
-		int hits[ROC_Size][Row_Size][Col_Size];
 
 		TH2InfoClass<TH2_Type> h2[ROC_Size];
 		TH1InfoClass<TH1_Type> h1[ROC_Size];
@@ -54,13 +53,6 @@ void pixelCheck(){
 				cout<<"Success create TH1 and TH2 in "<<index_ROC[index]<<" !"<<endl;	
 
 			output_f->cd();
-
-			for( int r=0; r<Row_Size; r++){
-				for( int c=0; c<Col_Size; c++){
-					hits[index][r][c]=0; // inintialize	
-				} // colume
-			} // row
-			 
 		} // roc
 	
 		TH1D* h_hits = new TH1D("TotalHits", "Total Hits", 9, -1, 8);
@@ -80,33 +72,33 @@ void pixelCheck(){
 			tree->GetEntry(hit);			
 			h_hits->Fill(Hit.ROCnumber);
 			if( Hit.ROCnumber < 0 ) continue; 	// Some Hit.ROCnumber = -1	
-			//output_f->cd(index_ROC[Hit.ROCnumber].c_str());	// Enter the ROC_number directory
-			
 				h2[Hit.ROCnumber].GetTH2("HitsMap")->Fill(Hit.col,Hit.row);
 				h1[Hit.ROCnumber].GetTH1("ROCnumber")->Fill(Hit.ROCnumber);
 				h1[Hit.ROCnumber].GetTH1("Row")->Fill(Hit.raw);
 				h1[Hit.ROCnumber].GetTH1("Column")->Fill(Hit.col);
 				if( Hit.raw>=0 && Hit.col>=0 ){
-					string hits_row = "Hits_Row_" + int2str(Hit.row);	
-					h1[Hit.ROCnumber].GetTH1(hits_row)->Fill(Hit.col);	
-					hits[Hit.ROCnumber][Hit.row][Hit.col]++;
-
 					if( Hit.col%2==0 ){ //Fill event column : 0,2,4,6....
+						string hits_row = "Hits_Row_" + int2str(Hit.row);	
+						string hits_row_i = "Hits_Row_" + int2str(Hit.row) + "_ideal";	
 						string hits_2col   = "Hits_2Col_" + int2str(Hit.col) + "." + int2str(int(Hit.col+1));	
 						string hits_2col_i = "Hits_2Col_" + int2str(Hit.col) + "." + int2str(Hit.col+1) + "_ideal";	
+						h1[Hit.ROCnumber].GetTH1(hits_row)->Fill(Hit.col);	
+						h1[Hit.ROCnumber].GetTH1(hits_row_i)->Fill(Hit.col+1);	
 						h1[Hit.ROCnumber].GetTH1(hits_2col)->Fill(Hit.row);
 						h1[Hit.ROCnumber].GetTH1(hits_2col_i)->Fill((159-Hit.row));
 
 					}else{ //Fill odd column : 1,3,5,....
+						string hits_row = "Hits_Row_" + int2str(Hit.row);	
+						string hits_row_i = "Hits_Row_" + int2str(Hit.row) + "_ideal";	
 						string hits_2col   = "Hits_2Col_" + int2str(Hit.col-1) + "." + int2str(Hit.col);	
 						string hits_2col_i = "Hits_2Col_" + int2str(Hit.col-1) + "." + int2str(Hit.col) + "_ideal";	
+						h1[Hit.ROCnumber].GetTH1(hits_row)->Fill(Hit.col);	
+						h1[Hit.ROCnumber].GetTH1(hits_row_i)->Fill(Hit.col-1);	
 						h1[Hit.ROCnumber].GetTH1(hits_2col)->Fill((159-Hit.row));
 						h1[Hit.ROCnumber].GetTH1(hits_2col_i)->Fill(Hit.row);
 					}
 					
 				}
-
-			//output_f->cd(); // Exit
 		} // Hit
 
 		// Caculate ideal hits for each column in each row
@@ -122,17 +114,6 @@ void pixelCheck(){
 				string hits_row   = "Hits_Row_" + int2str(j);
 				string hits_row_i = "Hits_Row_" + int2str(j) + "_ideal";
 				string ratio      = "Ratio_Row_" + int2str(j);
-
-				for( int k=0; k<Col_Size; k++){
-					double idealHits;
-					if( k%2==1 ){ // Odd cloumn
-						idealHits =  hits[i][j][k-1];
-					}else{
-						idealHits = hits[i][j][k+1];
-					}	
-					h1[i].GetTH1(hits_row_i)->Fill(k,idealHits);
-				} // Column
-
 				h1[i].GetTH1(ratio)->Divide( h1[i].GetTH1(hits_row), h1[i].GetTH1(hits_row_i) );	
 			} //Row
 		} // Roc
