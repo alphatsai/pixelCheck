@@ -9,6 +9,7 @@
 #include "TCanvas.h"
 #include "TF1.h"
 #include "TLine.h"
+#include "TText.h"
 
 template<typename TH1>
 void ratioPlots( TCanvas* c1, TH1* h_r, TH1* h_i, 
@@ -37,7 +38,7 @@ void ratioPlots( TCanvas* c1, TH1* h_r, TH1* h_i,
 	hRatio->Divide(h_i);
 	yMaximum = hRatio->GetMaximum();
 	yMinimum = hRatio->GetMinimum(0);
-	hRatio->GetYaxis()->SetRangeUser(yMinimum/2,yMaximum+yMaximum/5);
+	hRatio->GetYaxis()->SetRangeUser(yMinimum/2.5,yMaximum+yMaximum/5);
 	hRatio->SetXTitle(xTitle.c_str());
 	hRatio->SetYTitle(yTitle.c_str());
 	hRatio->SetLineColor(9); 
@@ -52,15 +53,22 @@ void ratioPlots( TCanvas* c1, TH1* h_r, TH1* h_i,
 		double p1=fpol1->GetParameter(1);
 		double endPoint=double(fitMax*p1)+p0;
 		double p1new=(endPoint-1)/(fitMax-fitMin);
-		char fun[100];
+		char fun[100], text[100];
 		sprintf(fun,"x*(%f)+1",p1new);	
+		sprintf(text,"Tangent: %f",p1new);	
 		TF1* fnew = new TF1("fnew", fun, fitMin, fitMax);
 		fnew->SetLineColor(2);
 		fnew->SetLineWidth(3);
 		fnew->Draw("SAME");
+	
+			
+		TText* Title = new TText( fitMax/12, yMinimum, text);
+		Title->SetTextColor(2);
+		Title->SetTextSize(0.035);
+		Title->Draw("SAME");
 	}
 
-	//c1->SaveAs(savePath.c_str());
+	c1->SaveAs(savePath.c_str());
 	c1->cd();
 }
 

@@ -66,13 +66,17 @@ void drawPlotsPdf(){
 			for( int j=0; j<Col_Size/2; j++){
 				string hits_2col   = "Hits_2Col_" + int2str(j*2) + "." + int2str(j*2+1);
 				string hits_2col_i = "Hits_2Col_" + int2str(j*2) + "." + int2str(j*2+1) + "_ideal";
-				string output;
+				string ratio_2col = "Ratio_2Col_" + int2str(j*2) + "." + int2str(j*2+1) ;
+				string output, output_r;
 				if( j==0 ){
-					output = storePlotsPath + "/" + sampleName[isample] + index_ROC[i] + "_HitsRatio2Col.pdf(";
+					output 	 = storePlotsPath + "/" + sampleName[isample] + index_ROC[i] + "_HitsRatio2Col.pdf(";
+					output_r = storePlotsPath + "/" + sampleName[isample] + index_ROC[i] + "_Ratio2Col.pdf(";
 				}else if( j==Col_Size/2-1){
-					output = storePlotsPath + "/" + sampleName[isample] + index_ROC[i] + "_HitsRatio2Col.pdf)";
+					output 	 = storePlotsPath + "/" + sampleName[isample] + index_ROC[i] + "_HitsRatio2Col.pdf)";
+					output_r = storePlotsPath + "/" + sampleName[isample] + index_ROC[i] + "_Ratio2Col.pdf)";
 				}else{
-					output = storePlotsPath + "/" + sampleName[isample] + index_ROC[i] + "_HitsRatio2Col.pdf";
+					output   = storePlotsPath + "/" + sampleName[isample] + index_ROC[i] + "_HitsRatio2Col.pdf";
+					output_r = storePlotsPath + "/" + sampleName[isample] + index_ROC[i] + "_Ratio2Col.pdf";
 				}
 				h1[i].GetTH1(hits_2col)->UseCurrentStyle();	
 				h1[i].GetTH1(hits_2col)->SetLineWidth(2);	
@@ -87,17 +91,23 @@ void drawPlotsPdf(){
 
 				ratioPlotsAll( c1, h1[i].GetTH1(hits_2col), h1[i].GetTH1(hits_2col_i), 
 						h1[i].GetVar(hits_2col).xTitle, (index_ROC[i]+" "+h1[i].GetVar(hits_2col).Title), output);
+				ratioPlots( c1, h1[i].GetTH1(hits_2col), h1[i].GetTH1(hits_2col_i), 
+						h1[i].GetVar(hits_2col).xTitle, (index_ROC[i]+" "+h1[i].GetVar(ratio_2col).Title), output_r, 0, 160, true);
 			}
 			for( int j=0; j<Row_Size; j++){
 				string hits_row   = "Hits_Row_" + int2str(j);
 				string hits_row_i = "Hits_Row_" + int2str(j) + "_ideal";
-				string output;
+				string ratio_row  = "Ratio_Row_" + int2str(j);
+				string output, output_r;
 				if( j==0 ){
-					output = storePlotsPath + "/" + sampleName[isample] + index_ROC[i] + "_HitsRatio.pdf(";
+					output 	 = storePlotsPath + "/" + sampleName[isample] + index_ROC[i] + "_HitsRatio.pdf(";
+					output_r = storePlotsPath + "/" + sampleName[isample] + index_ROC[i] + "_Ratio.pdf(";
 				}else if( j==Row_Size-1){
-					output = storePlotsPath + "/" + sampleName[isample] + index_ROC[i] + "_HitsRatio.pdf)";
+					output 	 = storePlotsPath + "/" + sampleName[isample] + index_ROC[i] + "_HitsRatio.pdf)";
+					output_r = storePlotsPath + "/" + sampleName[isample] + index_ROC[i] + "_Ratio.pdf)";
 				}else{
-					output = storePlotsPath + "/" + sampleName[isample] + index_ROC[i] + "_HitsRatio.pdf";
+					output 	 = storePlotsPath + "/" + sampleName[isample] + index_ROC[i] + "_HitsRatio.pdf";
+					output_r = storePlotsPath + "/" + sampleName[isample] + index_ROC[i] + "_Ratio.pdf";
 				}	
 				h1[i].GetTH1(hits_row)->UseCurrentStyle();	
 				h1[i].GetTH1(hits_row)->SetLineWidth(2);	
@@ -109,6 +119,8 @@ void drawPlotsPdf(){
 
 				ratioPlotsAll( c1, h1[i].GetTH1(hits_row), h1[i].GetTH1(hits_row_i), 
 						h1[i].GetVar(hits_row).xTitle, (index_ROC[i]+" "+h1[i].GetVar(hits_row).Title), output);
+				ratioPlots( c1, h1[i].GetTH1(hits_row), h1[i].GetTH1(hits_row_i), 
+						h1[i].GetVar(hits_row).xTitle, (index_ROC[i]+" "+h1[i].GetVar(ratio_row).Title), output_r);
 			} //Row
 		} // Roc
 	} // sample

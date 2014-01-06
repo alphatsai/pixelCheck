@@ -90,7 +90,7 @@ void drawPlots(){
 			for( int j=0; j<Row_Size; j++){
 				string hits_row   = "Hits_Row_" + int2str(j);
 				string hits_row_i = "Hits_Row_" + int2str(j) + "_ideal";
-				string ratio_row = "Ratio_Row_" + int2str(j) ;
+				string ratio_row  = "Ratio_Row_" + int2str(j);
 				string output, output_r;
 				output   = storePlotsPath + "/" + sampleName[isample] + index_ROC[i] + "_HitsRatio_" + int2str(j) + ".png";
 				output_r = storePlotsPath + "/" + sampleName[isample] + index_ROC[i] + "_OnlyRatio_" + int2str(j) + ".png";

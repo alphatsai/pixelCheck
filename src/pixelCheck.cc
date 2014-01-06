@@ -77,7 +77,7 @@ void pixelCheck(){
 				h1[Hit.ROCnumber].GetTH1("Row")->Fill(Hit.raw);
 				h1[Hit.ROCnumber].GetTH1("Column")->Fill(Hit.col);
 				if( Hit.raw>=0 && Hit.col>=0 ){
-					if( Hit.col%2==0 ){ //Fill event column : 0,2,4,6....
+					if( Hit.col%2==0 ){ //Fill even column : 0,2,4,6....
 						string hits_row = "Hits_Row_" + int2str(Hit.row);	
 						string hits_row_i = "Hits_Row_" + int2str(Hit.row) + "_ideal";	
 						string hits_2col   = "Hits_2Col_" + int2str(Hit.col) + "." + int2str(int(Hit.col+1));	

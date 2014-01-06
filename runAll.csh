@@ -133,7 +133,7 @@ while ( $exit == 0 )
 		echo "========== screen job's name is createPdf ============="
 		echo "================= log files in ./log =================="
 		cd src
-			screen -dmS createPdf ./screenRun.csh
+			screen -dmS createPdf ./screenRunPdf.csh
 		cd -
 		screen -list
 		echo "'"'screen -list'"' to check"
