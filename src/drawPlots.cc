@@ -85,7 +85,7 @@ void drawPlots(){
 				ratioPlotsAll( c1, h1[i].GetTH1(hits_2col), h1[i].GetTH1(hits_2col_i), 
 						h1[i].GetVar(hits_2col).xTitle, (index_ROC[i]+" "+h1[i].GetVar(hits_2col).Title), output);
 				ratioPlots( c1, h1[i].GetTH1(hits_2col), h1[i].GetTH1(hits_2col_i), 
-						h1[i].GetVar(hits_2col).xTitle, (index_ROC[i]+" "+h1[i].GetVar(ratio_2col).Title), output_r);
+						h1[i].GetVar(hits_2col).xTitle, (index_ROC[i]+" "+h1[i].GetVar(ratio_2col).Title), output_r, 0, 160, true);
 			}
 			for( int j=0; j<Row_Size; j++){
 				string hits_row   = "Hits_Row_" + int2str(j);
