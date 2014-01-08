@@ -29,20 +29,23 @@ string int2str(int i){
 
 void saveFitParameter(){
 	
-	string outputPath = storeRootPath + "/" + "2ColFitParameter" + ".root"
+	string outputPath = storeRootPath + "/" + "2ColFitParameter" + ".root";
 	TFile* output = new TFile(outputPath.c_str(), "RECREATE" ); 
 	TTree* tree[ROC_Size][treeSize];
 	fitParameter par[ROC_Size][treeSize];
+	cout<<"Creating tree..."<<endl;
 	for( int i=0; i<ROC_Size; i++){
 		output->mkdir(index_ROC[i].c_str());	
 		output->cd(index_ROC[i].c_str());
-			for( int j=0; j<ROC_Size; j++){
+			for( int j=0; j<Col_Size/2; j++){
 				string name= "2Col_" + int2str(j*2) + "." + int2str(j*2+1);
 				tree[i][j] = new TTree(name.c_str(),"");
-				par[i][j].RegisterTree(tree[i][j]);	
+				par[i][j].RegisterTree(tree[i][j]);
+				tree[i][j]->Fill();	
 			}
 		output->cd();
 	}
+	output->Write();
 	
 /*	for( int isample=0; isample<Sample_Size; isample++){
 	//for( int isample=0; isample<1; isample++){

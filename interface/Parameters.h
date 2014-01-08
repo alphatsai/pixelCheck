@@ -35,7 +35,7 @@ const string sampleName[Sample_Size] = {
 
 struct sampleInfo_{
 	int runNum;
-	int flux;
+	double flux;
 };
 struct sampleInfo_ sampleInfo[Sample_Size] = { //Accoding ../spillIntensity.txt
 	{ 35113, 683200000.0},		//tree_35113_

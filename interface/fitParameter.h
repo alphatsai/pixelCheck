@@ -6,8 +6,8 @@
 
 class fitParameter{
  public:
-  int Flux;
   int RunNumber;
+  double Flux;
   double p0_1;
   double p1_1;
   double e0_1;
@@ -18,8 +18,8 @@ class fitParameter{
   double e1_2;
   
   void RegisterTree(TTree *root) {
-  	root->Branch("Flux",		&Flux,	"Flux/I");
   	root->Branch("RunNumber",	&RunNumber,	"RunNumber/I");
+  	root->Branch("Flux",	&Flux,	"Flux/D");
   	root->Branch("p0_1",	&p0_1,	"p0_1/D");
   	root->Branch("p1_1",	&p1_1,	"p1_1/D");
   	root->Branch("e0_1",	&e0_1,	"e0_1/D");
@@ -31,8 +31,8 @@ class fitParameter{
   }										    
 
   void Register(TTree *root) {
-  	root->SetBranchAddress("Flux",		&Flux);
   	root->SetBranchAddress("RunNumber",	&RunNumber);
+  	root->SetBranchAddress("Flux",	&Flux);
   	root->SetBranchAddress("p0_1",	&p0_1);
   	root->SetBranchAddress("p1_1",	&p1_1);
   	root->SetBranchAddress("e0_1",	&e0_1);
