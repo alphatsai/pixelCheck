@@ -24,30 +24,9 @@ const int treeSize = Col_Size/2;
 const int run34 = 4;
 const int run35 = 4;
 
-// Change int to string
-string int2str(int i){
-	string s;
-	stringstream ss(s);
-	ss << i;
-	return ss.str();
-}
-
-void outputTGraph( TCanvas* c1, int num, double* x, double* y, 
-		   string xTitle, string yTitle, string output ){
-	
-	TGraph* g = new TGraph(num, x, y);
-	g->SetTitle("");
-	g->UseCurrentStyle();
-	g->GetXaxis()->SetTitle(xTitle.c_str());
-	g->GetYaxis()->SetTitle(yTitle.c_str());
-	g->SetLineColor(3);
-	g->SetLineWidth(3);
-	g->SetMarkerColor(2);
-	g->SetMarkerSize(2.5);
-	g->SetMarkerStyle(22);
-	g->Draw("A");
-	//c1->SaveAs(output.c_str());
-}
+string int2str(int i);
+void sortValue( const int max, double* x, double* y); //sort by x
+void outputTGraph( TCanvas* c1, int num, double* x, double* y, string Titlei, string xTitle, string yTitle, string output );
 
 void drawIneffFlux(){
 	
@@ -59,10 +38,10 @@ void drawIneffFlux(){
 	setTDRStyle();
 	TCanvas* c1 = new TCanvas("c1", "", 850, 700);
 
-	//for( int i=0; i<ROC_Size; i++){
-	for( int i=4; i<5; i++){
-		//for( int j=0; j<treeSize; j++){
-		for( int j=8; j<9; j++){
+	for( int i=0; i<ROC_Size; i++){
+	//for( int i=4; i<5; i++){
+		for( int j=0; j<treeSize; j++){
+		//for( int j=8; j<9; j++){
 			cout<<"Creating tree..."<<endl;
 			string name= index_ROC[i] + "/2Col_" + int2str(j*2) + "." + int2str(j*2+1);
 			tree[i][j] = (TTree*)input->Get(name.c_str());
@@ -75,7 +54,7 @@ void drawIneffFlux(){
 			int i34=0;			
 			int i35=0;			
 			
-			for( int k=0; k<Sample_Size; k++){
+			for( int k=0; k<Sample_Size; k++){ //record value
 				tree[i][j]->GetEntry(k);
 				if( par[i][j].RunNumber >= 35000 ){
 					flux35[i35]  = par[i][j].Flux/1000000;
@@ -87,9 +66,12 @@ void drawIneffFlux(){
 					i34++;
 				}		
 			}
-	
+			sortValue(run34, flux34, ineff34);
+			sortValue(run35, flux35, ineff35);
+				
+			string Title  = "double Column[" + int2str(j*2) + "," + int2str(j*2+1) +"]";	
 			string xTitle = "Intensity/10^{6}";
-			string yTitle = "2Col[" + int2str(j*2) + "." + int2str(j*2+1) + "]  Ineff-Rate[%]_{x100}";
+			string yTitle = "Inefficiency Rate[%]_{x100}   ";
 			string output34png = storePlotsPath + "/" + "IneffFlux_Run34_" + index_ROC[i] + "_2Col_" + int2str(j*2) + "." + int2str(j*2+1) + ".png";
 			string output35png = storePlotsPath + "/" + "IneffFlux_Run35_" + index_ROC[i] + "_2Col_" + int2str(j*2) + "." + int2str(j*2+1) + ".png";
 			string output34pdf, output35pdf;
@@ -105,16 +87,53 @@ void drawIneffFlux(){
 				output35pdf = storePlotsPath + "/" + "IneffFlux_Run35_" + index_ROC[i] + ".pdf";
 			}
 			
-			outputTGraph(c1, run34, flux34, ineff34, xTitle, yTitle, output34png);
-			//outputTGraph(c1, run34, flux34, ineff34, xTitle, yTitle, output34pdf);
-			//outputTGraph(c1, run35, flux35, ineff35, xTitle, yTitle, output35png);
-			//outputTGraph(c1, run35, flux35, ineff35, xTitle, yTitle, output35pdf);
+			//outputTGraph(c1, run34, flux34, ineff34, Title, xTitle, yTitle, output34png);
+			outputTGraph(c1, run34, flux34, ineff34, Title, xTitle, yTitle, output34pdf);
+			//outputTGraph(c1, run35, flux35, ineff35, Title, xTitle, yTitle, output35png);
+			outputTGraph(c1, run35, flux35, ineff35, Title, xTitle, yTitle, output35pdf);
 			
 		} //DOUBLE COL
 	} //ROC
 }
 
+// Function
+string int2str(int i){ // Change int to string
+	string s;
+	stringstream ss(s);
+	ss << i;
+	return ss.str();
+}
 
+void sortValue( const int max, double* x, double* y){ //sort by x from the lowest to the highest
+	for( int i=0; i<max; i++){
+		for( int j=i+1; j<max; j++){
+			double tmpx;
+			double tmpy;
+			if( x[i]>x[j] ){
+				tmpx = x[i];	
+				tmpy = y[i];	
+				x[i] = x[j];
+				y[i] = y[j];
+				x[j] = tmpx;
+				y[j] = tmpy;
+			}
+		}
+	}
+}
 
-
-
+void outputTGraph( TCanvas* c1, int num, double* x, double* y, 
+		   string Title, string xTitle, string yTitle, string output ){
+	
+	TGraph* g = new TGraph(num, x, y);
+	g->SetTitle(Title.c_str());
+	g->UseCurrentStyle();
+	g->GetXaxis()->SetTitle(xTitle.c_str());
+	g->GetYaxis()->SetTitle(yTitle.c_str());
+	g->SetLineColor(1);
+	g->SetLineWidth(3);
+	g->SetMarkerColor(2);
+	g->SetMarkerSize(2.5);
+	g->SetMarkerStyle(22);
+	g->Draw("APL");
+	c1->SaveAs(output.c_str());
+}
