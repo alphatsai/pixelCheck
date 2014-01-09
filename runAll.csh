@@ -14,28 +14,33 @@ endif
 set exit=0
 while ( $exit == 0 )
 	echo "########################################################"
-	echo "##                      Part 1/4                      ##"
+	echo "##                      Part 1/5                      ##"
 	echo "##      Store plots in .root files '"'result/root'"'      ##"
-	echo "## Would you like to change some parameters(y/n/q/p)? ##"
-	echo "##         y(Edit), n(Run), q(Quit), p(Skip)          ##"		
+	echo "## Would you like to change some parameters(e/r/q/s)? ##"
+	echo "##         e(Edit), r(Run), q(Quit), s(Skip)          ##"		
 	echo "########################################################"
 	set op = $<
 	if ( $op == q ) then
 		exit
-	else if ( $op == y ) then
+	else if ( $op == e ) then
 		cd interface
 			vi Parameters.h
 		cd -	
-	else if ( $op == n ) then
+	else if ( $op == r ) then
 		cd src
 			echo ""
 			echo "                For src/pixelCheck.cc                  "
 			echo "====================== Running ========================"
 			root pixelCheck.cc+ -l -b -q
 			echo "====================== The End ========================"
+			echo ""
+			echo "              For src/saveFitParameter.cc                  "
+			echo "====================== Running ========================"
+			root saveFitParameter.cc+ -l -b -q
+			echo "====================== The End ========================"
 		cd -
 		set exit=1
-	else if ( $op == p ) then
+	else if ( $op == s ) then
 		set exit=1
 	endif
 end
@@ -43,17 +48,17 @@ end
 set exit=0
 while ( $exit == 0 )
 	echo "######################################################"
-	echo "##                     Part 2/4                     ##"
+	echo "##                     Part 2/5                     ##"
 	echo "##        Create some 2D plots '"'result/plots'"'       ##"
 	echo "##      NOTE: Please make sure you can use root     ##"
 	echo "##                                                  ##"
 	echo "##   Would you like to use screen to run the macro  ##"
-	echo "##     y(yes), n(run directly), q(Quit), p(Skip)    ##"		
+	echo "##      r(Run screen), n(No), q(Quit), s(Skip)      ##"		
 	echo "######################################################"
 	set op = $<
 	if ( $op == q ) then
 		exit
-	else if ( $op == y ) then
+	else if ( $op == r ) then
 		echo ""
 		echo "                For src/drawPlotsFor2D.cc                  "
 		echo "========== screen job's name is 2D_Plots =============="
@@ -74,24 +79,63 @@ while ( $exit == 0 )
 			echo "====================== The End ========================"
 			set exit=1
 		cd -
-	else if ( $op == p ) then
+	else if ( $op == s ) then
 		set exit=1
 	endif
 end
 set exit=0
 while ( $exit == 0 )
 	echo "######################################################"
-	echo "##                     Part 3/4                     ##"
-	echo "##       Create some PNG plots '"'result/plots'"'       ##"
+	echo "##                     Part 3/5                     ##"
+	echo "##       Create some plots for ineff. vs flux       ##"
 	echo "##      NOTE: Please make sure you can use root     ##"
 	echo "##                                                  ##"
 	echo "##   Would you like to use screen to run the macro  ##"
-	echo "##         y(yes), n(run directly), q(Quit)         ##"		
+	echo "##      r(Run screen), n(No), q(Quit), s(Skip)      ##"		
 	echo "######################################################"
 	set op = $<
 	if ( $op == q ) then
 		exit
-	else if ( $op == y ) then
+	else if ( $op == r ) then
+		echo ""
+		echo "                 For src/drawPlots.cc                  "
+		echo "========== screen job's name is createPdf ============="
+		echo "================= log files in ./log =================="
+		cd src
+			screen -dmS createIneffFlux ./screenRunIff.csh
+		cd -
+		screen -list
+		echo "'"'screen -list'"' to check"
+		echo "Host: $HOST, record in log/host.log"
+		set exit=1
+	else if ( $op == n ) then
+		cd src
+			echo ""
+			echo "                For src/drawPlots.cc                  "
+			echo "====================== Running ========================"
+			root src/drawIneffFlux.cc+ -l -b -q	
+			echo "====================== The End ========================"
+			set exit=1
+		cd -
+	else if ( $op == s ) then
+		set exit=1
+	endif
+end
+
+set exit=0
+while ( $exit == 0 )
+	echo "######################################################"
+	echo "##                     Part 4/5                     ##"
+	echo "##       Create some PNG plots '"'result/plots'"'       ##"
+	echo "##      NOTE: Please make sure you can use root     ##"
+	echo "##                                                  ##"
+	echo "##   Would you like to use screen to run the macro  ##"
+	echo "##      r(Run screen), n(No), q(Quit), s(Skip)      ##"		
+	echo "######################################################"
+	set op = $<
+	if ( $op == q ) then
+		exit
+	else if ( $op == r ) then
 		echo ""
 		echo "                 For src/drawPlots.cc                  "
 		echo "========== screen job's name is createPdf ============="
@@ -112,22 +156,24 @@ while ( $exit == 0 )
 			echo "====================== The End ========================"
 			set exit=1
 		cd -
+	else if ( $op == s ) then
+		set exit=1
 	endif
 end
 set exit=0
 while ( $exit == 0 )
 	echo "######################################################"
-	echo "##                     Part 4/4                     ##"
+	echo "##                     Part 5/5                     ##"
 	echo "##       Create some PDF plots '"'result/plots'"'       ##"
 	echo "##      NOTE: Please make sure you can use root     ##"
 	echo "##                                                  ##"
 	echo "##   Would you like to use screen to run the macro  ##"
-	echo "##         y(yes), n(run directly), q(Quit)         ##"		
+	echo "##      r(Run screen), n(No), q(Quit), s(Skip)      ##"		
 	echo "######################################################"
 	set op = $<
 	if ( $op == q ) then
 		exit
-	else if ( $op == y ) then
+	else if ( $op == r ) then
 		echo ""
 		echo "               For src/drawPlotsPdf.cc                  "
 		echo "========== screen job's name is createPdf ============="
@@ -148,5 +194,7 @@ while ( $exit == 0 )
 			echo "====================== The End ========================"
 			set exit=1
 		cd -
+	else if ( $op == s ) then
+		set exit=1
 	endif
 end

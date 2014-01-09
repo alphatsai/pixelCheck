@@ -10,6 +10,7 @@
 #include "TLegend.h"
 #include "TMath.h"
 #include "TFile.h"
+#include "TF1.h"
 #include "../interface/fitParameter.h"
 #include "../interface/Parameters.h"	// Define parameters, input/output files
 #include "../interface/index_ROC.h"	// Define parameters 
@@ -37,17 +38,15 @@ void saveFitParameter(){
 	for( int i=0; i<ROC_Size; i++){
 		output->mkdir(index_ROC[i].c_str());	
 		output->cd(index_ROC[i].c_str());
-			for( int j=0; j<Col_Size/2; j++){
+			for( int j=0; j<treeSize; j++){
 				string name= "2Col_" + int2str(j*2) + "." + int2str(j*2+1);
 				tree[i][j] = new TTree(name.c_str(),"");
 				par[i][j].RegisterTree(tree[i][j]);
-				tree[i][j]->Fill();	
 			}
 		output->cd();
 	}
-	output->Write();
 	
-/*	for( int isample=0; isample<Sample_Size; isample++){
+	for( int isample=0; isample<Sample_Size; isample++){
 	//for( int isample=0; isample<1; isample++){
 		////= Input and prepare the out files ===========================================================================
 		string input	= storeRootPath + "/" + sampleName[isample] + ".root";
@@ -60,62 +59,56 @@ void saveFitParameter(){
 		for( int index=0; index<ROC_Size; index++){ 
 			string dirName = index_ROC[index] + "/";
 			h1[index].CreateTH1(input_f, dirName);
-			//h1[index].SetTitles();
 			cout<<"Success register TH1 from "<<index_ROC[index]<<" !"<<endl;	
 		} // roc
 	
 		////= Loop for each hit, Fill Histogram =========================================================================================
 		cout<<"Running..."<<endl;	
 	
-		TCanvas* c1 = new TCanvas("c1", "", 850, 700);
 		for( int i=0; i<ROC_Size; i++){
-			for( int j=0; j<Col_Size/2; j++){
+			for( int j=0; j<treeSize; j++){
+				int fitMin=0;
+				int fitMax=160;	
+
 				string hits_2col   = "Hits_2Col_" + int2str(j*2) + "." + int2str(j*2+1);
 				string hits_2col_i = "Hits_2Col_" + int2str(j*2) + "." + int2str(j*2+1) + "_ideal";
-				string ratio_2col = "Ratio_2Col_" + int2str(j*2) + "." + int2str(j*2+1) ;
-				string output, output_r;
-				output   = storePlotsPath + "/" + sampleName[isample] + index_ROC[i] + "_HitsRatio2Col_" + int2str(j*2) + "." + int2str(j*2+1) + ".png";
-				output_r = storePlotsPath + "/" + sampleName[isample] + index_ROC[i] + "_OnlyRatio2Col_" + int2str(j*2) + "." + int2str(j*2+1) + ".png";
+				
+				h1[i].GetTH1(hits_2col)->Sumw2();
+				h1[i].GetTH1(hits_2col_i)->Sumw2();
 
-				h1[i].GetTH1(hits_2col)->UseCurrentStyle();	
-				h1[i].GetTH1(hits_2col)->SetLineWidth(2);	
-				h1[i].GetTH1(hits_2col)->SetLineColor(4);
-				h1[i].GetTH1(hits_2col_i)->UseCurrentStyle();	
-				h1[i].GetTH1(hits_2col_i)->SetLineWidth(2);	
-				h1[i].GetTH1(hits_2col_i)->SetLineStyle(7);	
-				h1[i].GetTH1(hits_2col_i)->SetLineColor(2);
+				TF1* fpol1  = new TF1("fpol1", "pol1", fitMin, fitMax);	
+
+				TH1* hRatio = (TH1*)h1[i].GetTH1(hits_2col)->Clone("clone_record");
+				hRatio->Divide(h1[i].GetTH1(hits_2col_i));
+				hRatio->Fit("fpol1", "L");
 	
-				//setXLableFor2Col(h1[i].GetTH1(hits_2col), j);
-				//setXLableFor2Col(h1[i].GetTH1(hits_2col_i), j);
+				double p0_1 = fpol1->GetParameter(0);
+				double p1_1 = fpol1->GetParameter(1);
+				double e0_1 = fpol1->GetParError(0);			
+				double e1_1 = fpol1->GetParError(1);			
+				double endPoint = fitMax*p1_1+p0_1;
+				double endPoint_error = sqrt(fitMax*fitMax*e1_1*e1_1+e0_1*e0_1);
+				double p0_2 = 1;	
+				double p1_2 = (endPoint-p0_2)/(fitMax-fitMin);
+				double e0_2 = 0;			
+				double e1_2 = sqrt(endPoint_error*endPoint_error+e0_2*e0_2)/(fitMax-fitMin);			
+	
+				par[i][j].RunNumber = sampleInfo[isample].RunNumber;			
+				par[i][j].Flux = sampleInfo[isample].Flux;			
+				par[i][j].p0_1 = p0_1;			
+				par[i][j].p1_1 = p1_1;			
+				par[i][j].e0_1 = e0_1;			
+				par[i][j].e1_1 = e1_1;			
+				par[i][j].p0_2 = p0_2;			
+				par[i][j].p1_2 = p1_2;			
+				par[i][j].e0_2 = e0_2;
+				par[i][j].e1_2 = e1_2;
 
-				ratioPlotsAll( c1, h1[i].GetTH1(hits_2col), h1[i].GetTH1(hits_2col_i), 
-						h1[i].GetVar(hits_2col).xTitle, (index_ROC[i]+" "+h1[i].GetVar(hits_2col).Title), output);
-				ratioPlots( c1, h1[i].GetTH1(hits_2col), h1[i].GetTH1(hits_2col_i), 
-						h1[i].GetVar(hits_2col).xTitle, (index_ROC[i]+" "+h1[i].GetVar(ratio_2col).Title), output_r, 0, 160, true);
+				tree[i][j]->Fill();
 			}
-			for( int j=0; j<Row_Size; j++){
-				string hits_row   = "Hits_Row_" + int2str(j);
-				string hits_row_i = "Hits_Row_" + int2str(j) + "_ideal";
-				string ratio_row  = "Ratio_Row_" + int2str(j);
-				string output, output_r;
-				output   = storePlotsPath + "/" + sampleName[isample] + index_ROC[i] + "_HitsRatio_" + int2str(j) + ".png";
-				output_r = storePlotsPath + "/" + sampleName[isample] + index_ROC[i] + "_OnlyRatio_" + int2str(j) + ".png";
-
-				h1[i].GetTH1(hits_row)->UseCurrentStyle();	
-				h1[i].GetTH1(hits_row)->SetLineWidth(2);	
-				h1[i].GetTH1(hits_row)->SetLineColor(4);
-				h1[i].GetTH1(hits_row_i)->UseCurrentStyle();	
-				h1[i].GetTH1(hits_row_i)->SetLineWidth(2);	
-				h1[i].GetTH1(hits_row_i)->SetLineStyle(7);	
-				h1[i].GetTH1(hits_row_i)->SetLineColor(2);	
-
-				ratioPlotsAll( c1, h1[i].GetTH1(hits_row), h1[i].GetTH1(hits_row_i), 
-						h1[i].GetVar(hits_row).xTitle, (index_ROC[i]+" "+h1[i].GetVar(hits_row).Title), output);
-				ratioPlots( c1, h1[i].GetTH1(hits_row), h1[i].GetTH1(hits_row_i), 
-						h1[i].GetVar(hits_row).xTitle, (index_ROC[i]+" "+h1[i].GetVar(ratio_row).Title), output_r);
-			} //Row
 		} // Roc
-	} // sample*/
+	} // sample
+	output->Write();
 }
 
 
