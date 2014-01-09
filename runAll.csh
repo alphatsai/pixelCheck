@@ -98,7 +98,7 @@ while ( $exit == 0 )
 		exit
 	else if ( $op == r ) then
 		echo ""
-		echo "                 For src/drawPlots.cc                  "
+		echo "              For src/drawIneffFlux.cc                  "
 		echo "========== screen job's name is createPdf ============="
 		echo "================= log files in ./log =================="
 		cd src
@@ -111,7 +111,7 @@ while ( $exit == 0 )
 	else if ( $op == n ) then
 		cd src
 			echo ""
-			echo "                For src/drawPlots.cc                  "
+			echo "              For src/drawIneffFlux.cc                  "
 			echo "====================== Running ========================"
 			root src/drawIneffFlux.cc+ -l -b -q	
 			echo "====================== The End ========================"

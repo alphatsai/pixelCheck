@@ -42,7 +42,6 @@ void drawIneffFlux(){
 	//for( int i=4; i<5; i++){
 		for( int j=0; j<treeSize; j++){
 		//for( int j=8; j<9; j++){
-			cout<<"Creating tree..."<<endl;
 			string name= index_ROC[i] + "/2Col_" + int2str(j*2) + "." + int2str(j*2+1);
 			tree[i][j] = (TTree*)input->Get(name.c_str());
 			par[i][j].Register(tree[i][j]);
@@ -54,6 +53,7 @@ void drawIneffFlux(){
 			int i34=0;			
 			int i35=0;			
 			
+			cout<<"Reading tree "<<name<<"..."<<endl;
 			for( int k=0; k<Sample_Size; k++){ //record value
 				tree[i][j]->GetEntry(k);
 				if( par[i][j].RunNumber >= 35000 ){
@@ -81,7 +81,8 @@ void drawIneffFlux(){
 			}else if( j==treeSize-1){
 				output34pdf = storePlotsPath + "/" + "IneffFlux_Run34_" + index_ROC[i] + ".pdf)";
 				output35pdf = storePlotsPath + "/" + "IneffFlux_Run35_" + index_ROC[i] + ".pdf)";
-				cout<<"Here"<<endl;
+				cout<<"End of "<<output34pdf<<endl;
+				cout<<"End of "<<output35pdf<<endl;
 			}else{
 				output34pdf = storePlotsPath + "/" + "IneffFlux_Run34_" + index_ROC[i] + ".pdf";
 				output35pdf = storePlotsPath + "/" + "IneffFlux_Run35_" + index_ROC[i] + ".pdf";
