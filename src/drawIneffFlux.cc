@@ -87,9 +87,9 @@ void drawIneffFlux(){
 				output35pdf = storePlotsPath + "/" + "IneffFlux_Run35_" + index_ROC[i] + ".pdf";
 			}
 			
-			//outputTGraph(c1, run34, flux34, ineff34, Title, xTitle, yTitle, output34png);
+			outputTGraph(c1, run34, flux34, ineff34, Title, xTitle, yTitle, output34png);
 			outputTGraph(c1, run34, flux34, ineff34, Title, xTitle, yTitle, output34pdf);
-			//outputTGraph(c1, run35, flux35, ineff35, Title, xTitle, yTitle, output35png);
+			outputTGraph(c1, run35, flux35, ineff35, Title, xTitle, yTitle, output35png);
 			outputTGraph(c1, run35, flux35, ineff35, Title, xTitle, yTitle, output35pdf);
 			
 		} //DOUBLE COL
